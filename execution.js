@@ -21,12 +21,22 @@ function getTheCountSessionInTheModule()
 
 function getClassDayAndDateDetails(n)
 {
-   return jQuery('#root > div > div:nth-child(1) > div.me-cc-body > div > div._1lyWUiCXn1OPLIGJ8A5I0R > div > div > div.W2MrnAKwZgc2MVIhxa-kn > div:nth-child('+n+') > div > div._1OXiTCCC2l0j8_9scFM7Op > div._30_yzoGD0eVzPFGtVGWyjn > div._2BNQ-bWDv0-7ggyDXjpMM-._3m498PBrHlcd4hzr8ZWMw1').text();
+    var temp_selector='#root > div > div:nth-child(1) > div.me-cc-body > div > div._1lyWUiCXn1OPLIGJ8A5I0R > div > div > div.W2MrnAKwZgc2MVIhxa-kn > div:nth-child('+n+') > div > div._1OXiTCCC2l0j8_9scFM7Op > div._30_yzoGD0eVzPFGtVGWyjn > div._2BNQ-bWDv0-7ggyDXjpMM-._3m498PBrHlcd4hzr8ZWMw1';
+    if(checkSelectorIsExists(temp_selector)===false)
+    {
+        return false;
+    }
+   return jQuery(temp_selector).text();
 }
 
 function getClassName(n)
 {
-    return jQuery('#root > div > div:nth-child(1) > div.me-cc-body > div > div._1lyWUiCXn1OPLIGJ8A5I0R > div > div > div.W2MrnAKwZgc2MVIhxa-kn > div:nth-child('+n+') > div > div._1OXiTCCC2l0j8_9scFM7Op > div._30_yzoGD0eVzPFGtVGWyjn > div._2qANl4R5uQz0h1zE2Fxpqq > a').text();
+    var temp_selector='#root > div > div:nth-child(1) > div.me-cc-body > div > div._1lyWUiCXn1OPLIGJ8A5I0R > div > div > div.W2MrnAKwZgc2MVIhxa-kn > div:nth-child('+n+') > div > div._1OXiTCCC2l0j8_9scFM7Op > div._30_yzoGD0eVzPFGtVGWyjn > div._2qANl4R5uQz0h1zE2Fxpqq > a';
+    if(checkSelectorIsExists(temp_selector)===false)
+    {
+        return false;
+    }
+    return jQuery().text(temp_selector);
 }
 
 function getClassList()
@@ -36,9 +46,29 @@ function getClassList()
 
     for(var i=1;i<=class_count;i++)
     {
-        var data={ date : getClassDayAndDateDetails(i),class_name :getClassName(i)};
+        var data={ date_details : getClassDayAndDateDetails(i),class_name :getClassName(i),link:getHref(n)};
         class_list.push(data);
     }
      
     return class_list;
+}
+
+function getHref(n)
+{
+    var temp_selector='#root > div > div:nth-child(1) > div.me-cc-body > div > div._1lyWUiCXn1OPLIGJ8A5I0R > div > div > div.W2MrnAKwZgc2MVIhxa-kn > div:nth-child('+n+') > div > div._1OXiTCCC2l0j8_9scFM7Op > div._30_yzoGD0eVzPFGtVGWyjn > div._2qANl4R5uQz0h1zE2Fxpqq > a';
+    
+    if(checkSelectorIsExists(temp_selector)===false)
+    {
+        return false;
+    }
+    
+    return jQuery(temp_selector).attr('href');
+
+}
+
+jQuery.fn.exists = function(){return this.length>0;}
+
+function checkSelectorIsExists(selector)
+{
+    return jQuery(selector).exists()?true:false;
 }
