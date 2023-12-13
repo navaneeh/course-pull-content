@@ -118,4 +118,18 @@ function getContestValue(n)
 {
     return $('#root > div > div:nth-child(1) > div.me-cc-body > div > div._1lyWUiCXn1OPLIGJ8A5I0R > div > div > div.W2MrnAKwZgc2MVIhxa-kn > div:nth-child(' + n + ') > div > div > div > section > article > div._3YYjxxPpyCX9caRRCgDHt2 > div:nth-child(2) > div').text();
 }
+
+function insertIntoDB(insertData)
+{
+    //var myKeyVals = { A1984 : 1, A9873 : 5, A1674 : 2, A8724 : 1, A3574 : 3, A1165 : 5 }
+
+    var saveData = $.ajax({
+        type: 'POST',
+        url: "script",
+        data: {datas:insertData},
+        //dataType: "json",
+        success: function(resultData) { alert("Save Complete") }
+    });
+    saveData.error(function() { alert("Something went wrong"); });
+}
 console.log(getClassList());
