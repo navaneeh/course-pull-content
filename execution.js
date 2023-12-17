@@ -1,3 +1,6 @@
+// used chrome extnession 
+//D:\Chrom-Extension\live\live-stream-downloader\v3
+
 function getModule() {
     return jQuery('#root > div > div:nth-child(1) > div.me-cc-body > div > div._1lyWUiCXn1OPLIGJ8A5I0R > div > div > div._2umtbV0wAp_ErXetoqJv_p > div._3VMt5SpP8r3EG6hpcET6Jn > div.gQSZO1_zl4H5dNK96Gmc1 > div.ZV1LrApmcV6Ae3HM7BSTK.p-r-10').text();
 }
