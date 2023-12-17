@@ -64,7 +64,9 @@ function getClassList() {
             class_name: class_name_val,
             link: getHref(i),
             optional_class:optinal_class_val,
-            contest:contest_val
+            is_contest:contest_val,
+            module:getModule(),
+            module_name:getModuleName()
         };
         class_list.push(data);
     }
@@ -119,17 +121,29 @@ function getContestValue(n)
     return $('#root > div > div:nth-child(1) > div.me-cc-body > div > div._1lyWUiCXn1OPLIGJ8A5I0R > div > div > div.W2MrnAKwZgc2MVIhxa-kn > div:nth-child(' + n + ') > div > div > div > section > article > div._3YYjxxPpyCX9caRRCgDHt2 > div:nth-child(2) > div').text();
 }
 
-function insertIntoDB(insertData)
+// function getModule()
+// {
+//     //menu based module
+//     return $('#root > div > div:nth-child(1) > div.me-cc-body > div > div.RO7KNc0-vb4JUuAPraRrK > div.m-l-20.m-r-20.m-t-20 > div:nth-child(2) > a > div > div.ZV1LrApmcV6Ae3HM7BSTK._2JYdAssc0lyu2x28JaMdLb').text();
+// }
+
+// function getModuleName()
+// {
+//      //menu based module Name
+//     return $('#root > div > div:nth-child(1) > div.me-cc-body > div > div.RO7KNc0-vb4JUuAPraRrK > div.m-l-20.m-r-20.m-t-20 > div:nth-child(2) > a > div > div.m-b-5 > div').text();
+// }
+
+function insertIntoDB()
 {
     //var myKeyVals = { A1984 : 1, A9873 : 5, A1674 : 2, A8724 : 1, A3574 : 3, A1165 : 5 }
-
+    var insertData=getClassList();
     var saveData = $.ajax({
         type: 'POST',
-        url: "script",
+        url: "http://localhost/poc/course-pull-content/script.php",
         data: {datas:insertData},
         //dataType: "json",
-        success: function(resultData) { alert("Save Complete") }
+        success: function(resultData) { console.log(resultData); }
     });
-    saveData.error(function() { alert("Something went wrong"); });
+    //saveData.error(function() { alert("Something went wrong"); });
 }
-console.log(getClassList());
+console.log(insertIntoDB());
