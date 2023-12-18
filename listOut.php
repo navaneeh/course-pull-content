@@ -52,9 +52,9 @@ Class SessionDownload
         echo $str;
     }
 
-    public function getDownloadingSessionList()
+    public function getDownloadingSessionList($module='')
     {
-        $where="module='MODULE - 2' and is_video_downloaded=0";
+        $where="module='MODULE - $module' and is_video_downloaded=0";
         $this->showTheList($where);
     }
 
@@ -69,7 +69,7 @@ Class SessionDownload
 
     }
 
-    public function removingTheInProgressingFiles()
+    public function getUpdateFilesList()
     {
         $list=$this->getFileList();
         
@@ -78,31 +78,40 @@ Class SessionDownload
 
         $list=array_map(function($a){$temp=explode(".",$a); return $temp[0];},$list);
         
+        $list=$this->removeDuplicatedArrayElement($list);
+        return $list;
+        
     }
 
     public function removeDuplicatedArrayElement($array)
     {
-        $temp=[];
-        foreach($array as $value)
-        {
-            if(!in_array($value,$temp))
-            {
-               // unset();
-            }
-            else
-            {
-                //unset()
-            }
-        }
+        $array=array_count_values($array);
+        
+        $list=array_filter($array,function($v, $k){return $v==1;},ARRAY_FILTER_USE_BOTH);
+
+        return array_keys($list);
     }
 
     public function getFileList()
     {
         return scandir($this->file_storing_path);
     }
+
+    public function updateFlagForDownloadedFiles()
+    {
+        $list=$this->getUpdateFilesList();
+        foreach($list as $value)
+        {
+            $where=" link like '$value%' and is_video_downloaded='0'";
+            $data=$this->getSessionList();
+            $row=mysqli_fetch_assoc($result);
+            $row[0]['id'];
+        }
+        
+    }
         
 }
            
 $seesion_obj=new SessionDownload();
-$seesion_obj->getDownloadingSessionList();
-//$seesion_obj->removingTheInProgressingFiles();
+//$seesion_obj->getDownloadingSessionList(5);
+$seesion_obj->getUpdateFilesList();
