@@ -4,6 +4,7 @@ Class SessionDownload
 {
     public $conn='';
     public $file_storing_path='D:\Navaneeth\Personal\Class';
+    public $file_size=130;
 
     function __construct()
     {
@@ -41,6 +42,7 @@ Class SessionDownload
             $stream_video_link='https://www.scaler.com'.$row['link'].'?joinSession=1';
 
             $str.='<tr>';
+            $str.='<td>'.$row['module'].'</td>';
             $str.='<td>'.$row['date_details'].'</td>';
             $str.='<td>'.$row['class_name'].'</td>';
             $str.='<td><a href='.$stream_video_link.' target="_blank">'.$row['link'].'</a></td>';
@@ -54,7 +56,11 @@ Class SessionDownload
 
     public function getDownloadingSessionList($module='')
     {
-        $where="module='MODULE - $module' and is_video_downloaded=0";
+        $this->updateFlagForDownloadedFiles();
+        $where='';
+        if(!empty($module) && $module=='all')$where.=" module='MODULE - $module' and ";
+        
+        $where=" is_video_downloaded=0 and link!='false' ";
         $this->showTheList($where);
     }
 
@@ -66,7 +72,8 @@ Class SessionDownload
 
     public function updateSessionsDetails($id)
     {
-
+        $sql='update sessions set is_video_downloaded=1 where id='.$id;
+        return mysqli_query($this->conn, $sql);
     }
 
     public function getUpdateFilesList()
@@ -100,18 +107,41 @@ Class SessionDownload
     public function updateFlagForDownloadedFiles()
     {
         $list=$this->getUpdateFilesList();
+        // echo '<pre>';
+        // var_export($list);
+        // exit();
         foreach($list as $value)
         {
-            $where=" link like '$value%' and is_video_downloaded='0'";
-            $data=$this->getSessionList();
+            $current_file_size=($this->getFileSize($this->file_storing_path.DIRECTORY_SEPARATOR.$value.'.mkv')/1024/1024);
+  
+            if( $current_file_size< $this->file_size)
+            {
+                continue;
+            }
+
+            $where=" link like '%$value%' and is_video_downloaded='0'";
+            $result=$this->getSessionList($where);
             $row=mysqli_fetch_assoc($result);
-            $row[0]['id'];
+            if(!empty($row))
+            {
+                $this->updateSessionsDetails($row['id']);
+            }
         }
+
+        return true;
         
     }
+
+    public function getFileSize($path)
+    {
+        return filesize($path);
+    }
+
+
         
 }
            
 $seesion_obj=new SessionDownload();
-//$seesion_obj->getDownloadingSessionList(5);
-$seesion_obj->getUpdateFilesList();
+$seesion_obj->getDownloadingSessionList('all');
+//$seesion_obj->getUpdateFilesList();
+//$seesion_obj->updateFlagForDownloadedFiles();
