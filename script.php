@@ -29,8 +29,12 @@
                     continue;
                 }
 
+                $array_value=array_values($values);
+               //array_map(function($a){return addslashes($a);},$array_value);
+                //mysqli_real_escape_string($conn, $array_value[1] ); //for mysqli
 
-                $sql ="INSERT INTO sessions (".implode(",",array_keys($values)).") Values ('". implode("','",array_values($values))."')";
+              
+                $sql ="INSERT INTO sessions (".implode(",",array_keys($values)).") Values ('". implode("','",$array_value)."')";
                 
                 if(mysqli_query($conn, $sql)) 
                 {
